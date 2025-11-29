@@ -27,13 +27,13 @@ public class SecurityConfig {
 
         httpSec.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request->
-                        request.requestMatchers("/","/api/products/**").permitAll()
+                        request.requestMatchers("/","/register").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
-                .sessionManagement(session->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+               // .sessionManagement(session->
+                       // session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider());
 
         return httpSec.build();
