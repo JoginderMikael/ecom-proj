@@ -3,6 +3,7 @@ package git.joginderMikael.ecom_proj.controller;
 import git.joginderMikael.ecom_proj.model.EcomUsers;
 import git.joginderMikael.ecom_proj.service.EcomUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,5 +19,10 @@ public class EcomUsersController {
     @PostMapping("/register")
     public EcomUsers registerUser(@RequestBody EcomUsers user) {
         return ecomUserService.registerUser(user);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody EcomUsers user){
+        return  ecomUserService.verify(user);
     }
 }
