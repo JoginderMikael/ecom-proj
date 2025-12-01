@@ -19,7 +19,7 @@ public class EcomUsersService {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtService jwtService;
+    JWTService jwtService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     public EcomUsers registerUser(EcomUsers user) {
