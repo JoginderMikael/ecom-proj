@@ -49,4 +49,13 @@ public class ProductService {
     public List<Product> searchProducts(String keyword) {
         return repo.searchProducts(keyword);
     }
+
+    public void purchaseProduct(Product product, int quantityBought) {
+        int newStockQuantity = product.getStockQuantity() - quantityBought;
+        product.setStockQuantity(newStockQuantity);
+        if(newStockQuantity == 0){
+            product.setProductAvailable(false);
+        }
+        repo.save(product);
+    }
 }

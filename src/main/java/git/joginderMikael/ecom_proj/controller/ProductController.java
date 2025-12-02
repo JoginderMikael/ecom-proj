@@ -91,4 +91,20 @@ public ResponseEntity<List<Product>> searchProduct(@RequestParam String keyword)
 List<Product> products = service.searchProducts(keyword);
 return new ResponseEntity<>(products, HttpStatus.OK);
 }
+
+@PostMapping("/product/{id}/purchase")
+    public ResponseEntity<String> purchase(@PathVariable int id, @RequestParam int quantityBought){
+      Product product = service.getProductById(id);
+      if(product == null){
+          return new ResponseEntity<>("Product Not found", HttpStatus.NOT_FOUND);
+      }
+
+      if(product.getStockQuantity() < quantityBought){
+          return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+      }else {
+          service.purchaseProduct(product, quantityBought);
+          return new ResponseEntity<>("Purchase Successful",HttpStatus.OK);
+      }
+
+}
 }
