@@ -4,7 +4,7 @@ import git.joginderMikael.ecom_proj.dto.UserRegistrationRequest;
 import git.joginderMikael.ecom_proj.model.EcomUsers;
 import git.joginderMikael.ecom_proj.model.Role;
 import git.joginderMikael.ecom_proj.repo.EcomUsersRepo;
-import git.joginderMikael.ecom_proj.repo.RoleRepostory;
+import git.joginderMikael.ecom_proj.repo.RoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,8 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.RoleNotFoundException;
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +28,7 @@ public class EcomUsersService {
     JWTService jwtService;
 
     @Autowired
-    RoleRepostory roleRepostory;
+    RoleRepo roleRepostory;
 
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
