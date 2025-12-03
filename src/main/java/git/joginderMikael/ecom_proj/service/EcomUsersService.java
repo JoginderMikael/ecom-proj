@@ -42,10 +42,15 @@ public class EcomUsersService {
                 .map(roleName -> roleRepostory.findByName(roleName))
 //                                .(() -> new RoleNotFoundException("Role Not Found: " + roleName)))
                 .collect(Collectors.toSet());
+        //create new user object
         EcomUsers newUser = new EcomUsers();
+        //newuser username
         newUser.setUsername(user.getUsername());
 
+        //new user password
         newUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        //new user roles
+        newUser.setRoles(userRoles);
         return ecomUsersRepo.save(newUser);
     }
 

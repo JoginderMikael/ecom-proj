@@ -21,6 +21,13 @@ public class EcomUsers {
     private String username;
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.MERGE
+    })
+    @JoinTable(
+            name = "ecom_users_roles",
+            joinColumns = @JoinColumn(name = "ecom_users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_name")
+    )
     private Set<Role> roles = new HashSet<>();
 }
