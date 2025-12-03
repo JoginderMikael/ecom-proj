@@ -3,10 +3,13 @@ package git.joginderMikael.ecom_proj.service;
 import git.joginderMikael.ecom_proj.model.EcomUsers;
 import git.joginderMikael.ecom_proj.repo.EcomUsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 public class EcomUserDetailsService implements UserDetailsService{
@@ -23,7 +26,9 @@ public class EcomUserDetailsService implements UserDetailsService{
         return  User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles("USER") // You can set roles as per your requirement
+                .authorities(user.getRoles().stream()
+                    .map(r-> new SimpleGrantedAuthority(r.getName()))
+                    .collect(Collectors.toList()))
                 .build();
     }
 
