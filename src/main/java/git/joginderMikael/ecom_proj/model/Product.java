@@ -23,7 +23,7 @@ public class Product {
     private String name;
     private String description;
     private String brand;
-    private BigDecimal price;
+    private Double price;
     private String category;
 
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyy")
