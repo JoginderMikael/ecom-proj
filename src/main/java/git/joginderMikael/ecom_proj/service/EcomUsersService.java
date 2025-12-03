@@ -40,7 +40,7 @@ public class EcomUsersService {
         //resolving roles
         Set<Role> userRoles = user.getRoles().stream()
                 .map(roleName -> roleRepostory.findByName(roleName))
-//                                .(() -> new RoleNotFoundException("Role Not Found: " + roleName)))
+ //                              .orElseThrow(() -> new RoleNotFoundException("Role Not Found: " + roleName)))
                 .collect(Collectors.toSet());
         //create new user object
         EcomUsers newUser = new EcomUsers();
