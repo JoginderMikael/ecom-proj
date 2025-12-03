@@ -1,5 +1,6 @@
 package git.joginderMikael.ecom_proj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name="order_id")
+    @JsonIgnore
     private Order order;
 
 
