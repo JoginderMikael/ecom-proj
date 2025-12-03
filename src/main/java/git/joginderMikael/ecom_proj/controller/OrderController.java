@@ -1,6 +1,7 @@
 package git.joginderMikael.ecom_proj.controller;
 
 import git.joginderMikael.ecom_proj.dto.OrderRequestItem;
+import git.joginderMikael.ecom_proj.dto.PlaceOrderRequest;
 import git.joginderMikael.ecom_proj.model.Order;
 import git.joginderMikael.ecom_proj.model.ShippingAddress;
 import git.joginderMikael.ecom_proj.service.OrderService;
@@ -21,10 +22,13 @@ public class OrderController {
 
 
     @PostMapping("/place")
-    public ResponseEntity<Order> placeOrder(@RequestParam int userId,
-                                            @RequestBody List<OrderRequestItem> cartItems,
-                                            @RequestBody ShippingAddress address){
-        Order order = orderService.placeOrder(userId, cartItems, address);
+    public ResponseEntity<Order> placeOrder(@RequestBody PlaceOrderRequest request){
+
+        Order order = orderService.placeOrder(
+                request.getUserId(),
+                request.getCartItems(),
+                request.getAddress()
+        );
 
         return new ResponseEntity<>(order, HttpStatus.OK);
     }
