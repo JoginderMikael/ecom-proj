@@ -39,4 +39,14 @@ public class CartController {
         cartService.clearCart(userId);
         return new ResponseEntity<>("Cart cleared Sucessfully", HttpStatus.OK);
     }
+
+    @GetMapping("/view")
+    public ResponseEntity<Cart> viewCart(@RequestParam int userId){
+        Cart cart = cartService.viewCart(userId);
+        if(cart == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(cart, HttpStatus.OK);
+    }
 }

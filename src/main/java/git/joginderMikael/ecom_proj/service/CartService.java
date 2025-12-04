@@ -117,4 +117,12 @@ public class CartService {
         //save the repository
         cartRepository.save(cart);
     }
+
+    public Cart viewCart(int userId) {
+        EcomUsers user = ecomUsersRepo.findById(userId)
+                .orElseThrow(()-> new RuntimeException("No user found!"));
+
+        return cartRepository.findByUser(user)
+                .orElseThrow(()->new RuntimeException("Cart not found!"));
+    }
 }
