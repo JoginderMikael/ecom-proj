@@ -16,8 +16,9 @@ public class CartController {
     @Autowired
     CartService cartService;
     @PostMapping("/add")
-    public ResponseEntity<Cart> addToCart(@RequestBody AddToCartRequest addToCartRequest){
-        Cart cart = cartService.addToCart(addToCartRequest);
+    public ResponseEntity<Cart> addToCart(@RequestParam int userId,
+            @RequestBody AddToCartRequest addToCartRequest){
+        Cart cart = cartService.addToCart(addToCartRequest, userId);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 }

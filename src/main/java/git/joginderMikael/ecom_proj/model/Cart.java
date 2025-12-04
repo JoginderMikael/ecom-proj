@@ -27,4 +27,8 @@ public class Cart {
 
     private double total;
 
+    public void addItem(CartItem cartItem) {
+        items.add(cartItem);
+        cartItem.setCart(this);
+    }
 }
