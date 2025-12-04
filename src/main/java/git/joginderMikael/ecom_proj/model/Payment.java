@@ -17,10 +17,20 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    private Order order;
+
     @Enumerated(EnumType.STRING)
-    private PaymentMethod method;
+    private PaymentMethod paymentMethod;
 
-    private boolean paid;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
+    @Enumerated(EnumType.STRING)
+    private String transactionId;
+
+    //private boolean paid;
+
+    private double amount;
     private LocalDateTime paidAt;
 }
