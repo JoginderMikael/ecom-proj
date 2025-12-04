@@ -101,4 +101,20 @@ public class CartService {
         cart.setTotal(newTotal);
         cartRepository.save(cart);
     }
+
+    public void clearCart(int userId) {
+        EcomUsers user = ecomUsersRepo.findById(userId)
+                .orElseThrow(()-> new RuntimeException("User not found!"));
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(()-> new RuntimeException("Cart Not Found for the user: " + user));
+
+        //Remove all the items
+        cart.getItems().clear();
+
+        //Reset total
+        cart.setTotal(0);
+
+        //save the repository
+        cartRepository.save(cart);
+    }
 }

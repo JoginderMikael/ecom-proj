@@ -25,7 +25,7 @@ public class CartController {
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
-@PostMapping("/remove")
+    @PostMapping("/remove")
     public ResponseEntity<String> removeFromCart(
         @RequestParam int userId,
         @RequestBody RemoveCartItemRequest removeCartItemRequest
@@ -33,4 +33,10 @@ public class CartController {
         cartService.removeFromCart(userId, removeCartItemRequest.getProductId(), removeCartItemRequest.getQuantity());
         return new ResponseEntity<>("Item removed from Cart!", HttpStatus.OK);
 }
+
+    @DeleteMapping("/clear")
+    public ResponseEntity<String> clearCart(@RequestParam int userId){
+        cartService.clearCart(userId);
+        return new ResponseEntity<>("Cart cleared Sucessfully", HttpStatus.OK);
+    }
 }
