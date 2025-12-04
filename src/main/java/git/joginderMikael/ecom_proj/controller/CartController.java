@@ -1,6 +1,7 @@
 package git.joginderMikael.ecom_proj.controller;
 
 import git.joginderMikael.ecom_proj.dto.AddToCartRequest;
+import git.joginderMikael.ecom_proj.dto.RemoveCartItemRequest;
 import git.joginderMikael.ecom_proj.model.Cart;
 import git.joginderMikael.ecom_proj.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,21 @@ public class CartController {
 
     @Autowired
     CartService cartService;
+
+
     @PostMapping("/add")
     public ResponseEntity<Cart> addToCart(@RequestParam int userId,
             @RequestBody AddToCartRequest addToCartRequest){
         Cart cart = cartService.addToCart(addToCartRequest, userId);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
+
+@PostMapping("/remove")
+    public ResponseEntity<String> removeFromCart(
+        @RequestParam int userId,
+        @RequestBody RemoveCartItemRequest removeCartItemRequest
+        ){
+        cartService.removeFromCart(userId, removeCartItemRequest.getProductId(), removeCartItemRequest.getQuantity());
+        return new ResponseEntity<>("Item removed from Cart!", HttpStatus.OK);
+}
 }
