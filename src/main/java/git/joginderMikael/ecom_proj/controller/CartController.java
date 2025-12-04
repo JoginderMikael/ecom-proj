@@ -1,6 +1,7 @@
 package git.joginderMikael.ecom_proj.controller;
 
 import git.joginderMikael.ecom_proj.dto.AddToCartRequest;
+import git.joginderMikael.ecom_proj.dto.CartUpdateRequest;
 import git.joginderMikael.ecom_proj.dto.RemoveCartItemRequest;
 import git.joginderMikael.ecom_proj.model.Cart;
 import git.joginderMikael.ecom_proj.service.CartService;
@@ -48,5 +49,12 @@ public class CartController {
         }
 
         return new ResponseEntity<>(cart, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Cart> updateCart(@RequestParam int userId,
+                                           @RequestBody CartUpdateRequest cartUpdateRequest){
+        Cart updatedCart = cartService.updateCartItem(userId, cartUpdateRequest);
+        return new ResponseEntity<>(updatedCart, HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package git.joginderMikael.ecom_proj.service;
 
 import git.joginderMikael.ecom_proj.dto.AddToCartRequest;
+import git.joginderMikael.ecom_proj.dto.CartUpdateRequest;
 import git.joginderMikael.ecom_proj.model.Cart;
 import git.joginderMikael.ecom_proj.model.CartItem;
 import git.joginderMikael.ecom_proj.model.EcomUsers;
@@ -124,5 +125,37 @@ public class CartService {
 
         return cartRepository.findByUser(user)
                 .orElseThrow(()->new RuntimeException("Cart not found!"));
+    }
+
+    public Cart updateCartItem(int userId, CartUpdateRequest cartUpdateRequest) {
+        EcomUsers user = ecomUsersRepo.findById(userId)
+                .orElseThrow(()->new RuntimeException("User Not found!"));
+
+        Cart cart = cartRepository.findByUser(user)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+
+        Product product = productRepo.findById(Math.toIntExact(cartUpdateRequest.getProductId()))
+                .orElseThrow(()-> new RuntimeException("Product not found!"));
+
+        CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
+                .orElseThrow(()-> new RuntimeException("Product not found in the carr"));
+        //address situation when items quantity is less than 0
+        if(cartUpdateRequest.getQuantity() <= 0){
+            cart.getItems().remove(cartItem);
+            cartItemRepository.delete(cartItem);
+        }else {
+            cartItem.setQuantity(cartUpdateRequest.getQuantity());
+            cartItem.setPriceAtAdd(product.getPrice() * cartUpdateRequest.getQuantity());
+        }
+
+        //recalculating the total
+
+        double total = 0.0;
+        for (CartItem item : cart.getItems()) {
+            double priceAtAdd = cartItem.getPriceAtAdd();
+            total += priceAtAdd;
+        }
+        cart.setTotal(total);
+        return cartRepository.save(cart);
     }
 }
