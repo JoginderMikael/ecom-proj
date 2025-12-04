@@ -26,7 +26,6 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
 
-    @Enumerated(EnumType.STRING)
     private String transactionId;
 
     //private boolean paid;
