@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable int id) {
+    public ResponseEntity<Product> getProduct(@PathVariable Long id) {
 
         Product product = service.getProductById(id);
         if (product != null)
@@ -54,7 +54,7 @@ public class ProductController {
     }
 
     @GetMapping("product/{productId}/image")
-    public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId) {
+    public ResponseEntity<byte[]> getImageByProductId(@PathVariable Long productId) {
         Product product = service.getProductById(productId);
         byte[] imageFile = product.getImageData();
         return ResponseEntity.ok()
@@ -79,7 +79,7 @@ public class ProductController {
 
 
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         Product product = service.getProductById(id);
         if (product != null) {
             service.deleteProduct(id);
@@ -97,7 +97,7 @@ public class ProductController {
     }
 
     @PostMapping("/product/{id}/purchase")
-    public ResponseEntity<String> purchase(@PathVariable int id, @RequestParam int quantityBought) {
+    public ResponseEntity<String> purchase(@PathVariable Long id, @RequestParam int quantityBought) {
         Product product = service.getProductById(id);
         if (product == null) {
             return new ResponseEntity<>("Product Not found", HttpStatus.NOT_FOUND);
