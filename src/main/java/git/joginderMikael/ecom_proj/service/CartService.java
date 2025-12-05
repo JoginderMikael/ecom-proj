@@ -44,7 +44,7 @@ public class CartService {
                     return cartRepository.save(newCart);
                 });
 
-        Product product = productRepo.findById(Math.toIntExact(addToCartRequest.getProductId()))
+        Product product = productRepo.findById(addToCartRequest.getProductId())
                 .orElseThrow(()-> new RuntimeException("Product Not found!"));
 
         //checking if the item is already existing
@@ -72,7 +72,7 @@ public class CartService {
         Cart cart = cartRepository.findByUser(user)
                 .orElseThrow(()-> new RuntimeException("Cart Not Found for the user: " + user));
 
-        Product product = productRepo.findById(Math.toIntExact(productId))
+        Product product = productRepo.findById(productId)
                 .orElseThrow(()-> new RuntimeException("Product not found"));
 
         CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
@@ -134,7 +134,7 @@ public class CartService {
         Cart cart = cartRepository.findByUser(user)
                 .orElseThrow(()-> new RuntimeException("User not found"));
 
-        Product product = productRepo.findById(Math.toIntExact(cartUpdateRequest.getProductId()))
+        Product product = productRepo.findById(cartUpdateRequest.getProductId())
                 .orElseThrow(()-> new RuntimeException("Product not found!"));
 
         CartItem cartItem = cartItemRepository.findByCartAndProduct(cart, product)
