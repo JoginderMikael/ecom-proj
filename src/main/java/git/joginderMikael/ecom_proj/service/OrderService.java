@@ -88,9 +88,10 @@ public class OrderService {
         }
 
         //recalculating the cart total
-        double newCartTotal = cart.getItems().stream()
-                        .mapToDouble(CartItem::getPriceAtAdd)
-                        .sum();
+        double newCartTotal = cart.getItems()
+                .stream()
+                .mapToDouble(CartItem::getPriceAtAdd)
+                .sum();
 
         cart.setTotal(newCartTotal);
         cartRepository.save(cart);
@@ -98,5 +99,55 @@ public class OrderService {
         return order;
 //        order.setTotalAmount(total);
 //        return  orderRepo.save(order);
+    }
+
+    public Order updateOrderStatus(Long orderId, String status) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+        OrderStatus newStatus;
+
+        try{
+            newStatus = OrderStatus.valueOf(status.toUpperCase());
+        } catch(IllegalStateException e){
+            throw  new RuntimeException("Invalid status: " + status);
+        }
+
+        //validating the status change
+        validateStatusChange(order.getStatus(), newStatus);
+
+        order.setStatus(newStatus);
+        return orderRepo.save(order);
+    }
+
+    private void validateStatusChange(OrderStatus current, OrderStatus newStatus) {
+        switch (current){
+            case PENDING -> {
+                if(newStatus != OrderStatus.PAID && newStatus != OrderStatus.CANCELLED){
+                    throw new RuntimeException("PENDING can only move to PAID or CANCELLED");
+                }
+                break;
+            }
+            case PAID -> {
+                if(newStatus != OrderStatus.SHIPPED){
+                    throw new RuntimeException("PAID can only move to SHIPPED!");
+                }
+                break;
+            }
+            case SHIPPED -> {
+                if(newStatus != OrderStatus.DELIVERED){
+                    throw new RuntimeException("SHIPPED can only move to DELIVERED");
+                }
+                break;
+            }
+            case DELIVERED -> {
+                if(newStatus != OrderStatus.RETURNED) {
+                    throw new RuntimeException("DELIVERED orders can only move to RETURNED");
+                }
+                break;
+            }
+            case CANCELLED -> throw new RuntimeException("CANCELLED orders cannot be updated");
+            default -> throw new RuntimeException("Invalid Status transition");
+        }
+
     }
 }
