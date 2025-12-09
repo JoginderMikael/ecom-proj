@@ -27,7 +27,7 @@ public class EcomUserDetailsService implements UserDetailsService{
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .authorities(user.getRoles().stream()
-                    .map(r-> new SimpleGrantedAuthority(r.getName()))
+                    .map(r-> new SimpleGrantedAuthority("ROLE_" + r.getName()))
                     .collect(Collectors.toList()))
                 .build();
     }
