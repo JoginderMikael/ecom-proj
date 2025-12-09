@@ -4,9 +4,12 @@ package git.joginderMikael.ecom_proj.controller;
 import git.joginderMikael.ecom_proj.dto.UpdateUserRolesRequest;
 import git.joginderMikael.ecom_proj.model.EcomUsers;
 import git.joginderMikael.ecom_proj.model.Order;
+import git.joginderMikael.ecom_proj.model.OrderStatus;
 import git.joginderMikael.ecom_proj.model.Product;
 import git.joginderMikael.ecom_proj.repo.OrderRepo;
+import git.joginderMikael.ecom_proj.service.AdminOrderService;
 import git.joginderMikael.ecom_proj.service.AdminUserService;
+import git.joginderMikael.ecom_proj.service.OrderService;
 import git.joginderMikael.ecom_proj.service.ProductService;
 import org.apache.catalina.Role;
 import org.apache.catalina.User;
@@ -29,6 +32,9 @@ public class AdminController {
 
     @Autowired
     private ProductService  productService;
+
+    @Autowired
+    private AdminOrderService  adminOrderService;
 
     /*
     USER MANAGEMENT
@@ -85,21 +91,25 @@ public class AdminController {
      */
 
     @GetMapping("/orders")
-    public ResponseEntity<List<Order>> getAllOrders()
+    public ResponseEntity<List<Order>> getAllOrders(@RequestParam(required = false) OrderStatus orderStatus)
     {
-        return null;
-    }
+       List<Order> orders;
 
-    @GetMapping("/orders?status=PENDING")
-    public ResponseEntity<List<Order>> getAllPendingOrders()
-    {
-        return null;
+       if(orderStatus != null)
+       {
+           orders = adminOrderService.getOrderByStatus(orderStatus);
+       }else {
+           orders = adminOrderService.getAllOrders();
+       }
+
+       return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @PutMapping("/orders/{id}/status")
-    public ResponseEntity<Order> updateStatus(@PathVariable Long id, @RequestParam String status)
+    public ResponseEntity<Order> updateStatus(@PathVariable Long id, @RequestParam OrderStatus orderStatus)
     {
-        return null;
+        Order updated =  adminOrderService.updateStatus(id, orderStatus);
+        return ResponseEntity.ok(updated);
     }
 
     /*
