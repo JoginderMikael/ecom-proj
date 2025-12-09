@@ -1,12 +1,16 @@
 package git.joginderMikael.ecom_proj.controller;
 
 
+import git.joginderMikael.ecom_proj.dto.UpdateUserRolesRequest;
 import git.joginderMikael.ecom_proj.model.EcomUsers;
 import git.joginderMikael.ecom_proj.model.Order;
 import git.joginderMikael.ecom_proj.model.Product;
+import git.joginderMikael.ecom_proj.service.AdminUserService;
 import org.apache.catalina.Role;
 import org.apache.catalina.User;
 import org.hibernate.stat.Statistics;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,29 +22,35 @@ import java.util.List;
 public class AdminController {
 
 
+    @Autowired
+    private AdminUserService adminUserService;
+
     /*
     USER MANAGEMENT
      */
     @GetMapping("/users")
     public ResponseEntity<List<EcomUsers>> getAllUsers()
     {
-        return null;
+        return new ResponseEntity<>(adminUserService.listAllUsers(), HttpStatus.OK);
     }
 
     @PutMapping("/users/{id}/roles")
-    public ResponseEntity<EcomUsers> updateRoles(@PathVariable Long id)
+    public ResponseEntity<EcomUsers> updateRoles(
+            @PathVariable int id,
+            @RequestBody UpdateUserRolesRequest request
+    )
     {
-        return null;
+        return new ResponseEntity<>(adminUserService.updateUserRoles(id, request.getRoles()), HttpStatus.OK);
     }
 
     @PutMapping("/users/{id}/block")
-    public ResponseEntity<EcomUsers> accessBlock(){
-        return null;
+    public ResponseEntity<EcomUsers> blockUser(@PathVariable int id){
+      return new ResponseEntity<>(adminUserService.blockUser(id), HttpStatus.OK);
     }
 
     @PutMapping("/users/{id}/unblock")
-    public ResponseEntity<EcomUsers> accessUnblock(){
-        return null;
+    public ResponseEntity<EcomUsers> unBlockUser(@PathVariable int id){
+        return new ResponseEntity<>(adminUserService.unBlockUser(id), HttpStatus.OK);
     }
 
     /*

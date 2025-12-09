@@ -34,4 +34,7 @@ public class EcomUsers {
             inverseJoinColumns = @JoinColumn(name = "roles_name")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @Column(name ="account_locked")
+    private Boolean accountLocked = false;
 }
