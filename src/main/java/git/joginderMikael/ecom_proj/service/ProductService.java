@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@Transactional
 //@RequiredArgsConstructor
 public class ProductService {
 
@@ -47,7 +48,7 @@ public class ProductService {
         repo.deleteById(id);
     }
 
-    @Transactional
+//    @Transactional
     public List<Product> searchProducts(String keyword) {
         return repo.searchProducts(keyword);
     }
@@ -71,7 +72,7 @@ public class ProductService {
     public Product toggleProduct(Long id){
         Product product = repo.findById(id).orElseThrow(()->new RuntimeException("Product not found"));
 
-        product.setEnabled(!product.isEnabled());
+        product.setEnabled(!product.getEnabled());
         return repo.save(product);
     }
 

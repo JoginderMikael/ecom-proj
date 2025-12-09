@@ -38,5 +38,5 @@ public class Product {
     private byte[] imageData;
 
     //for toggle
-    private boolean enabled = true;
+    private Boolean enabled = true;
 }
