@@ -5,7 +5,9 @@ import git.joginderMikael.ecom_proj.dto.UpdateUserRolesRequest;
 import git.joginderMikael.ecom_proj.model.EcomUsers;
 import git.joginderMikael.ecom_proj.model.Order;
 import git.joginderMikael.ecom_proj.model.Product;
+import git.joginderMikael.ecom_proj.repo.OrderRepo;
 import git.joginderMikael.ecom_proj.service.AdminUserService;
+import git.joginderMikael.ecom_proj.service.ProductService;
 import org.apache.catalina.Role;
 import org.apache.catalina.User;
 import org.hibernate.stat.Statistics;
@@ -24,6 +26,9 @@ public class AdminController {
 
     @Autowired
     private AdminUserService adminUserService;
+
+    @Autowired
+    private ProductService  productService;
 
     /*
     USER MANAGEMENT
@@ -58,18 +63,21 @@ public class AdminController {
      */
 
     @PutMapping("/products/{id}/stock")
-    public ResponseEntity<Product> updateStock(@RequestBody Product product, @PathVariable Long id){
-        return null;
+    public ResponseEntity<Product> updateStock(@RequestParam Integer stockQuantity, @PathVariable Long id){
+
+        return ResponseEntity.ok(productService.updateStock(id, stockQuantity));
     }
 
     @PutMapping("/products/{id}/toggle")
-    public ResponseEntity<Product> updateToggle(@RequestBody Product product, @PathVariable Long id){
-        return null;
+    public ResponseEntity<Product> toggleProduct(@PathVariable Long id){
+        return  ResponseEntity.ok(productService.toggleProduct(id));
     }
 
     @GetMapping("/products/low-stock")
-    public ResponseEntity<Product> lowStock(){
-        return null;
+    public ResponseEntity<List<Product>> lowStock(
+            @RequestParam(defaultValue = "10") int threshold
+    ){
+        return ResponseEntity.ok(productService.getLowStockProducts(threshold));
     }
 
     /*

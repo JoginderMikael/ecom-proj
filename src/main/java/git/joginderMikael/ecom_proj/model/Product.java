@@ -37,4 +37,6 @@ public class Product {
     @Lob
     private byte[] imageData;
 
+    //for toggle
+    private boolean enabled = true;
 }

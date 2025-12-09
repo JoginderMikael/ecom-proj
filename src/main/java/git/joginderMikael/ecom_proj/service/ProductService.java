@@ -2,6 +2,7 @@ package git.joginderMikael.ecom_proj.service;
 
 import git.joginderMikael.ecom_proj.model.Product;
 import git.joginderMikael.ecom_proj.repo.ProductRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+//@RequiredArgsConstructor
 public class ProductService {
 
     @Autowired
@@ -57,5 +59,23 @@ public class ProductService {
             product.setProductAvailable(false);
         }
         repo.save(product);
+    }
+
+    public Product updateStock(Long id, Integer newStockQuantity) {
+        Product product = repo.findById(id).orElseThrow(()->new RuntimeException("Product not found"));
+
+        product.setStockQuantity(newStockQuantity);
+        return repo.save(product);
+    }
+
+    public Product toggleProduct(Long id){
+        Product product = repo.findById(id).orElseThrow(()->new RuntimeException("Product not found"));
+
+        product.setEnabled(!product.isEnabled());
+        return repo.save(product);
+    }
+
+    public List<Product> getLowStockProducts(int threshold){
+        return repo.findBystockQuantityLessThanEqual(threshold);
     }
 }
