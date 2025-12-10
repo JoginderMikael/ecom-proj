@@ -14,53 +14,56 @@ import java.util.List;
 public interface OrderRepo extends JpaRepository<Order, Long> {
     List<Order> findByStatus(OrderStatus status);
 
-    @Query("SELECT SUM(o.totalAmount) FROM Order o WHERE o.status ='COMPLETED'")
+    @Query("""
+    SELECT SUM(o.totalAmount)
+    FROM Order o
+    WHERE o.status = 'COMPLETED'
+    """)
     Double sumTotalRevenue();
 
     @Query("""
-    SELECT new git.joginderMikael.ecom_proj.dto.analyticsDTO.MonthlySalesDTO(
-        FUNCTION('DATE_FORMAT', o.createdAt, '%Y-%m'),
-            SUM(o.totalAmount)
-        )
-            FROM Order o
-                WHERE o.status = 'COMPLETED'
-                    GROUP BY FUNCTION('DATE_FORMAT', o.createdAt, '%Y-%m')
-                        ORDER BY FUNCTION('DATE_FORMAT', o.createdAt, '%Y-%m')
+        SELECT new git.joginderMikael.ecom_proj.dto.analyticsDTO.MonthlySalesDTO(
+        FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM'),
+        SUM(o.totalAmount)
+    )
+    FROM Order o
+    WHERE o.status = 'COMPLETED'
+    GROUP BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
+    ORDER BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
     """)
     List<MonthlySalesDTO> getMonthlySales();
 
 
     @Query("""
     SELECT SUM(o.totalAmount) FROM Order o
-        WHERE o.status = 'COMPLETED'
-            AND MONTH(o.createdAt) = MONTH(CURRENT_DATE)
-                AND YEAR(o.createdAt) = YEAR(CURRENT_DATE)
+    WHERE o.status = 'COMPLETED'
+        AND FUNCTION('DATE_TRUNC', 'month', o.createdAt) = FUNCTION('DATE_TRUNC', 'month', CURRENT_TIMESTAMP())
     """)
     Double sumRevenueThisMonth();
 
 
     @Query("""
-    SELECT SUM(o.totalAmount)
-        FROM Order o
-            WHERE o.status = 'COMPLETED'
-                AND DATE(o.createdAt) = CURRENT_DATE
-    """)
+SELECT SUM(o.totalAmount)
+FROM Order o
+WHERE o.status = 'COMPLETED'
+    AND FUNCTION('DATE', o.createdAt) = FUNCTION('CURRENT_DATE')
+""")
     Double sumRevenueToday();
 
 
 
     @Query("""
-    SELECT new git.joginderMikael.ecom_proj.dto.analyticsDTO.MonthlySalesDTO(
-        p.id,
-            p.name,
-                SUM(oi.quantity)
-        )
-            FROM OrderItem oi
-                JOIN oi.product p
-                    JOIN oi.order o
-                        WHERE o.status = 'COMPLETED'
-                            GROUP BY p.id, p.name
-                                ORDER BY SUM(oi.quantity) DESC
-    """)
+SELECT new git.joginderMikael.ecom_proj.dto.analyticsDTO.TopProductDTO(
+    p.id,
+    p.name,
+    SUM(oi.quantity)
+)
+FROM OrderItem oi
+JOIN oi.product p
+JOIN oi.order o
+WHERE o.status = 'COMPLETED'
+GROUP BY p.id, p.name
+ORDER BY SUM(oi.quantity) DESC
+""")
     List<TopProductDTO> getTopSellingProducts();
 }

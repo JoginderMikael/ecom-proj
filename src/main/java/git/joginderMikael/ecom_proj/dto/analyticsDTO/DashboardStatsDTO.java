@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DashbordStatsDTO {
+public class DashboardStatsDTO {
 
     private long totalUsers;
     private long totalOrders;

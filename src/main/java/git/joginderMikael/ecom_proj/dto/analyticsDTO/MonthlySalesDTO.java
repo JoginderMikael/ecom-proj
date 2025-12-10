@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MonthlySalesDTO {
     private String month;
-    private double sales;
+    private Double totalSales;
 }
