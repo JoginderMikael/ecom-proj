@@ -140,10 +140,13 @@ public class OrderService {
                 break;
             }
             case DELIVERED -> {
-                if(newStatus != OrderStatus.RETURNED) {
-                    throw new RuntimeException("DELIVERED orders can only move to RETURNED");
+                if(newStatus != OrderStatus.COMPLETED && newStatus != OrderStatus.CANCELLED) {
+                    throw new RuntimeException("DELIVERED can only move to CANCELLED or COMPLETED");
                 }
                 break;
+            }
+            case COMPLETED -> {
+                throw new RuntimeException("COMPLETED orders cannot be updated");
             }
             case CANCELLED -> throw new RuntimeException("CANCELLED orders cannot be updated");
             default -> throw new RuntimeException("Invalid Status transition");
