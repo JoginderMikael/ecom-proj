@@ -108,32 +108,10 @@ public class AdminController {
     @PutMapping("/orders/{id}/status")
     public ResponseEntity<Order> updateStatus(@PathVariable Long id, @RequestParam OrderStatus orderStatus)
     {
+        //http://localhost:8081/api/admin/orders/1/status?orderStatus=DELIVERED
         Order updated =  adminOrderService.updateStatus(id, orderStatus);
         return ResponseEntity.ok(updated);
     }
 
-    /*
-    DASHBOARD ANALYTICS
-     */
-    @GetMapping("/analytics/stats")
-    public ResponseEntity<Statistics> getStatistics()
-    {
-        return null;
-    }
 
-    @GetMapping("/analytics/monthly-sales")
-    public ResponseEntity<Statistics> getMonthlySales()
-    {
-        return null;
-    }
-    @GetMapping("/analytics/revenue")
-    public ResponseEntity<Statistics> getRevenue()
-    {
-        return null;
-    }
-    @GetMapping("analytics/top-products")
-    public ResponseEntity<Statistics> getTopProducts()
-    {
-        return null;
-    }
 }
