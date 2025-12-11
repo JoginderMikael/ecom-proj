@@ -35,7 +35,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
     @Override
     public List<MonthlySalesDTO> getMonthlySales() {
-        return orderRepository.getMonthlySales();
+        return null;
+        //return orderRepository.getMonthlySales();
     }
 
     @Override

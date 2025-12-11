@@ -17,26 +17,16 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     @Query("""
     SELECT SUM(o.totalAmount)
     FROM Order o
-    WHERE o.status = 'COMPLETED'
+    WHERE o.status = 'DELIVERED'
     """)
     Double sumTotalRevenue();
 
-    @Query("""
-        SELECT new git.joginderMikael.ecom_proj.dto.analyticsDTO.MonthlySalesDTO(
-        FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM'),
-        SUM(o.totalAmount)
-    )
-    FROM Order o
-    WHERE o.status = 'COMPLETED'
-    GROUP BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
-    ORDER BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
-    """)
-    List<MonthlySalesDTO> getMonthlySales();
+
 
 
     @Query("""
     SELECT SUM(o.totalAmount) FROM Order o
-    WHERE o.status = 'COMPLETED'
+    WHERE o.status = 'DELIVERED'
         AND FUNCTION('DATE_TRUNC', 'month', o.createdAt) = FUNCTION('DATE_TRUNC', 'month', CURRENT_TIMESTAMP())
     """)
     Double sumRevenueThisMonth();
@@ -45,7 +35,7 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
     @Query("""
 SELECT SUM(o.totalAmount)
 FROM Order o
-WHERE o.status = 'COMPLETED'
+WHERE o.status = 'DELIVERED'
     AND FUNCTION('DATE', o.createdAt) = FUNCTION('CURRENT_DATE')
 """)
     Double sumRevenueToday();
@@ -61,9 +51,22 @@ SELECT new git.joginderMikael.ecom_proj.dto.analyticsDTO.TopProductDTO(
 FROM OrderItem oi
 JOIN oi.product p
 JOIN oi.order o
-WHERE o.status = 'COMPLETED'
+WHERE o.status = 'DELIVERED'
 GROUP BY p.id, p.name
 ORDER BY SUM(oi.quantity) DESC
 """)
     List<TopProductDTO> getTopSellingProducts();
+
+//    @Query("""
+//        SELECT new git.joginderMikael.ecom_proj.dto.analyticsDTO.MonthlySalesDTO(
+//        FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM'),
+//        SUM(o.totalAmount)
+//    )
+//    FROM Order o
+//    WHERE o.status = 'COMPLETED'
+//    GROUP BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
+//    ORDER BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
+//    """
+//    )
+//    List<MonthlySalesDTO> getMonthlySales();
 }

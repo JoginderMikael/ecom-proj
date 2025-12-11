@@ -23,6 +23,7 @@ public class AnalyticsController {
 
     @GetMapping("/stats")
     public DashboardStatsDTO getDashboardStats() {
+        //http://localhost:8081/api/admin/analytics/stats
         return analyticsService.getDashboardStats();
     }
 
@@ -33,11 +34,13 @@ public class AnalyticsController {
 
     @GetMapping("/revenue")
     public RevenueDTO getRevenue() {
+        //http://localhost:8081/api/admin/analytics/revenue
         return analyticsService.getRevenue();
     }
 
     @GetMapping("/top-products")
     public List<TopProductDTO> getTopProducts() {
+        //http://localhost:8081/api/admin/analytics/top-products
         return analyticsService.getTopProducts();
     }
 }
