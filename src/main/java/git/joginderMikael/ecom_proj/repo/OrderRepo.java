@@ -63,10 +63,9 @@ ORDER BY SUM(oi.quantity) DESC
 //        SUM(o.totalAmount)
 //    )
 //    FROM Order o
-//    WHERE o.status = 'COMPLETED'
+//    WHERE o.status = 'DELIVERED'
 //    GROUP BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
 //    ORDER BY FUNCTION('TO_CHAR', o.createdAt, 'YYYY-MM')
-//    """
-//    )
+//    """)
 //    List<MonthlySalesDTO> getMonthlySales();
 }

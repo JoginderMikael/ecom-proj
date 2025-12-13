@@ -11,5 +11,5 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class MonthlySalesDTO {
     private String month;
-    private Double totalSales;
+    private double totalSales;
 }
