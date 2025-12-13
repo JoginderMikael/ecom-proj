@@ -2,10 +2,8 @@ package git.joginderMikael.ecom_proj.controller;
 
 
 import git.joginderMikael.ecom_proj.dto.UpdateUserRolesRequest;
-import git.joginderMikael.ecom_proj.model.EcomUsers;
-import git.joginderMikael.ecom_proj.model.Order;
-import git.joginderMikael.ecom_proj.model.OrderStatus;
-import git.joginderMikael.ecom_proj.model.Product;
+import git.joginderMikael.ecom_proj.model.*;
+import git.joginderMikael.ecom_proj.repo.OrderEventRepository;
 import git.joginderMikael.ecom_proj.repo.OrderRepo;
 import git.joginderMikael.ecom_proj.service.AdminOrderService;
 import git.joginderMikael.ecom_proj.service.AdminUserService;
@@ -35,6 +33,12 @@ public class AdminController {
 
     @Autowired
     private AdminOrderService  adminOrderService;
+
+    private  final OrderEventRepository  orderEventRepository;
+
+    public AdminController(OrderEventRepository orderEventRepository) {
+        this.orderEventRepository = orderEventRepository;
+    }
 
     /*
     USER MANAGEMENT
@@ -113,5 +117,9 @@ public class AdminController {
         return ResponseEntity.ok(updated);
     }
 
+    @GetMapping("/orders/{id}/events")
+    public ResponseEntity<List<OrderEvent>> getOrderEvents(@PathVariable Long id) {
+        return ResponseEntity.ok(orderEventRepository.findByOrderIdOrderByCreatedAtAsc(id));
+    }
 
 }

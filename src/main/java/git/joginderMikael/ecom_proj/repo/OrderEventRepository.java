@@ -11,5 +11,5 @@ import java.util.List;
 
 
 public interface OrderEventRepository extends JpaRepository<OrderEvent,Long> {
-    List<OrderEvent> findByOrderByCreatedAtAsc(Long orderId);
+    List<OrderEvent> findByOrderIdOrderByCreatedAtAsc(Long orderId);
 }

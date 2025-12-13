@@ -3,7 +3,9 @@ package git.joginderMikael.ecom_proj.controller;
 import git.joginderMikael.ecom_proj.dto.OrderRequestItem;
 import git.joginderMikael.ecom_proj.dto.PlaceOrderRequest;
 import git.joginderMikael.ecom_proj.model.Order;
+import git.joginderMikael.ecom_proj.model.OrderEvent;
 import git.joginderMikael.ecom_proj.model.ShippingAddress;
+import git.joginderMikael.ecom_proj.repo.OrderEventRepository;
 import git.joginderMikael.ecom_proj.service.OrderService;
 import git.joginderMikael.ecom_proj.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,11 @@ public class OrderController {
     PaymentService  paymentService;
 
 
+    private final OrderEventRepository orderEventRepository;
+
+    public OrderController(OrderEventRepository orderEventRepository) {
+        this.orderEventRepository = orderEventRepository;
+    }
     @PostMapping("/place")
     public ResponseEntity<Order> placeOrder(@RequestBody PlaceOrderRequest request){
 
@@ -54,6 +61,11 @@ public class OrderController {
             @RequestParam String transactionId
     ){
         return new ResponseEntity<>(paymentService.processPayment(id, provider, transactionId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/events")
+    public ResponseEntity<List<OrderEvent>> getOrderEvents(@PathVariable Long id) {
+        return ResponseEntity.ok(orderEventRepository.findByOrderIdOrderByCreatedAtAsc(id));
     }
 
 }
