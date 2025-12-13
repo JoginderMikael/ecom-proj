@@ -32,6 +32,8 @@ public class OrderService {
     @Autowired
     CartRepository cartRepository;
 
+    @Autowired
+    OrderEventService orderEventService;
 
     public Order placeOrder(int userId, List<OrderRequestItem> cartItems, ShippingAddress address) {
 
@@ -80,6 +82,13 @@ public class OrderService {
         order.setTotalAmount(total);
         orderRepo.save(order);
 
+        //Register the event
+        orderEventService.logEvent(
+                order,
+                OrderEventType.ORDER_CREATED,
+                "Order Created with total: " + order.getTotalAmount()
+        );
+
         //clearing purchased items from the cart
         for(OrderRequestItem requestItem:cartItems){
             Product product = productRepo.findById(requestItem.getProductId()).get();
@@ -116,7 +125,15 @@ public class OrderService {
         validateStatusChange(order.getStatus(), newStatus);
 
         order.setStatus(newStatus);
-        return orderRepo.save(order);
+
+        orderRepo.save(order);
+
+        orderEventService.logEvent(
+                order,
+                OrderEventType.ORDER_CHANGED,
+                "Status changed: " + order.getStatus()
+        );
+        return order;
     }
 
     private void validateStatusChange(OrderStatus current, OrderStatus newStatus) {
