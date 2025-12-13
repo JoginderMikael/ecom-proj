@@ -5,6 +5,7 @@ import git.joginderMikael.ecom_proj.dto.PlaceOrderRequest;
 import git.joginderMikael.ecom_proj.model.Order;
 import git.joginderMikael.ecom_proj.model.ShippingAddress;
 import git.joginderMikael.ecom_proj.service.OrderService;
+import git.joginderMikael.ecom_proj.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    PaymentService  paymentService;
 
 
     @PostMapping("/place")
@@ -40,6 +44,16 @@ public class OrderController {
     ){
         Order updated = orderService.updateOrderStatus(orderId, status);
         return  new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/{id}/pay")
+    public ResponseEntity<Order> payOrder(
+            @PathVariable Long id,
+            @RequestParam String provider,
+            @RequestParam String transactionId
+    ){
+        return new ResponseEntity<>(paymentService.processPayment(id, provider, transactionId), HttpStatus.OK);
     }
 
 }
